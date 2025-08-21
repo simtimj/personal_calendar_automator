@@ -1,1 +1,1 @@
-# -personal_calendar_automator
+# personal_calendar_automator
