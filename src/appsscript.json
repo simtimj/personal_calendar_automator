@@ -1,0 +1,21 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "dependencies": {
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "Calendar",
+        "version": "v3",
+        "serviceId": "calendar"
+      }
+    ],
+    "libraries": [
+      {
+        "userSymbol": "DateTime",
+        "version": "10",
+        "libraryId": "1X2qbPZljrYN_TrvWkwW8OAn6zQgN7Gu5o1D4OBq522FVaCskiyZe44Au"
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
+}

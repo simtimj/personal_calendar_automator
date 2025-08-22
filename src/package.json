@@ -1,0 +1,22 @@
+{
+  "name": "personal_calendar_automator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simtimj/personal_calendar_automator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simtimj/personal_calendar_automator/issues"
+  },
+  "homepage": "https://github.com/simtimj/personal_calendar_automator#readme",
+  "dependencies": {
+    "@types/google-apps-script": "^1.0.100"
+  }
+}
