@@ -21,6 +21,7 @@ function calendarAutomation() {
         'Devin Satterfield': 5
       }
 
+  // DONE
   // return today's (can change date) dog walking events in chronological order 
   const findDogWalkingEvents = () => {
     const personalCalID = "ad287b8a5121bf79b35b5f4a5da6b8efaeca21d4212c57ae628e5abc0d579438@group.calendar.google.com";
@@ -42,26 +43,28 @@ function calendarAutomation() {
       // call Events.list method to list the calendar events using calendarId optional query parameter
       const response = Calendar.Events.list(calendarId, optionalArgs);   // calls for all events, need day. 
       const events = response.items;
+      // console.log("events:", events)
       if (events.length === 0) {
         console.log('No upcoming events found');
         return;
       }
       // Print the calendar events
-      let today = String(Number(optionalArgs.timeMin.split("-")[2].slice(0, 2))); // 2 days in future
-      // console.log(2, "today" ,today)
-
+      // let today = String(Number(optionalArgs.timeMin.split("-")[2].slice(0, 2)) - 1); // 2 days in future
+      let today = "25"
+      // console.log("today:", today)
       let todayEvents = [];
 
       for (const event of events) {
         let eventStartTime = event.start.dateTime; // '2025-08-16T04:32:23.263Z'
         let eventEndTime = event.end.dateTime;
         // let day = eventStartTime.split("-")[2].slice(0, 2);   // 
-        let day = String(Number(eventStartTime.split("-")[2].slice(0, 2)));  // 3 days in future
-        // console.log(3, "day", day)
+        let day = String(Number(eventStartTime.split("-")[2].slice(0, 2)));  //
 
         if (!eventStartTime) { 
           eventStartTime = event.start.date;
         }
+
+        // console.log(4, today, day)
 
         // events today only
         if (day !== today) { // looking for today
@@ -87,29 +90,60 @@ function calendarAutomation() {
   }
   console.log("findDogWalkingEvents:", findDogWalkingEvents());
 
+  // DONE
   const findStartTime = () => {
     let startTimeRaw = walksForDay[0].eventStartTime.split("T")[1]
-    console.log("startTimeRaw:", startTimeRaw)
+    // console.log("startTimeRaw:", startTimeRaw)
     let startHourAndMin = startTimeRaw.slice(0, startTimeRaw.length - 4);   // '19:00:00Z   cut last 3 chars
     return startHourAndMin;
   }
-  
 
-  const adjustStartTime = () => {
-    let startHourAndMinRaw = findStartTime();
-    console.log("startHourAndMinRaw:", startHourAndMinRaw)
+  // DONE
+  const minutesToTime = (totalMinutes) => {
+    // example 600 minutes to 6:00
+    let hours = Math.floor(totalMinutes / 60);
+    let mins = totalMinutes % 60;
 
-    // let hours = Number(startTime[0]);
-    // let mins = Number(startTime[1]);
+    // console.log("totalMinutes:", totalMinutes)
+    // console.log("1 hours and minutes:", hours, mins)
+    
+    if (mins < 10) {
+      mins = "0" + mins ;
+    }
+    // console.log("2 hours and minutes:", hours, mins)
+    return String(hours) + ":" + String(mins);
   }
-  adjustStartTime();
+  
+  //DONE
+  const findAdjustedStartTime = () => {
+    let startHourAndMinRaw = findStartTime().split(":");
+    console.log("0, startHourAndMinRaw:", startHourAndMinRaw)   // 18:00 
+
+    let adjuster = driveLength[walksForDay[0].name]; // good
+    // console.log("adjuster:", adjuster);      // adjuster: 5
+
+    let hours = Number(startHourAndMinRaw[0]);
+    let mins = Number(startHourAndMinRaw[1]);
+
+    let totalMinutes = ((hours * 60) + mins) - adjuster;
+    // console.log("1 totalMinutes:", totalMinutes)
+    // console.log(1, minutesToTime(totalMinutes))
+    return minutesToTime(totalMinutes);
+
+  }
+  console.log("adjusted start time:", findAdjustedStartTime());
 
   const findEndTime = () => {
-
+    // find last event
   }
 
   const adjustEndTime = () => {
 
+  }
+
+  const createWorkBlocks = () => {
+    // need adjusted start time
+    // need adjusted end time
   }
 
   
