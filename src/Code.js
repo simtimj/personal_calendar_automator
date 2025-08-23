@@ -97,13 +97,13 @@ function calendarAutomation() {
     return startHourAndMin;
   }
 
-
+  // DONE
   const findEndTime = () => {
-        let endTimeRaw = walksForDay[walksForDay.length - 1].eventStartTime.split("T")[1]; // find last
-        console.log("0 endTimeRaw:", endTimeRaw)
-        let endHourAndMin = endTimeRaw.slice(0, endTimeRaw.length - 4);
-        console.log("1 endHourAndMin:", endHourAndMin)
-
+    let endTimeRaw = walksForDay[walksForDay.length - 1].eventEndTime.split("T")[1]; // find last
+    // console.log("0 endTimeRaw:", endTimeRaw)
+    let endHourAndMin = endTimeRaw.slice(0, endTimeRaw.length - 4);
+    // console.log("1 endHourAndMin:", endHourAndMin);
+    return endHourAndMin;
   }
   console.log("findEndTime:", findEndTime());
 
@@ -135,14 +135,23 @@ function calendarAutomation() {
 
     let totalMinutes = ((hours * 60) + mins) - adjuster;
     return minutesToTime(totalMinutes);
-
   }
   console.log("adjusted start time:", findAdjustedStartTime());
 
 
   const adjustEndTime = () => {
+    let endHourAndMinRaw = findEndTime().split(":");
+    console.log("0, endHourAndMinRaw:", endHourAndMinRaw)   // 18:00 
 
+    let adjuster = driveLength[walksForDay[0].name]; // good
+
+    let hours = Number(endHourAndMinRaw[0]);
+    let mins = Number(endHourAndMinRaw[1]);
+
+    let totalMinutes = ((hours * 60) + mins) + adjuster;
+    return minutesToTime(totalMinutes);
   }
+  console.log("1 adjustEndTime():", adjustEndTime())
 
   const createWorkBlocks = () => {
     // need adjusted start time
