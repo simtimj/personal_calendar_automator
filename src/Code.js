@@ -84,7 +84,6 @@ function calendarAutomation() {
     } catch (err) {
       console.log('Failed with error %s', err.message);
     }
-
     walksForDay = blockEvents;
     return walksForDay;
   }
@@ -97,6 +96,16 @@ function calendarAutomation() {
     let startHourAndMin = startTimeRaw.slice(0, startTimeRaw.length - 4);   // '19:00:00Z   cut last 3 chars
     return startHourAndMin;
   }
+
+
+  const findEndTime = () => {
+        let endTimeRaw = walksForDay[walksForDay.length - 1].eventStartTime.split("T")[1]; // find last
+        console.log("0 endTimeRaw:", endTimeRaw)
+        let endHourAndMin = endTimeRaw.slice(0, endTimeRaw.length - 4);
+        console.log("1 endHourAndMin:", endHourAndMin)
+
+  }
+  console.log("findEndTime:", findEndTime());
 
   // DONE
   const minutesToTime = (totalMinutes) => {
@@ -120,22 +129,16 @@ function calendarAutomation() {
     console.log("0, startHourAndMinRaw:", startHourAndMinRaw)   // 18:00 
 
     let adjuster = driveLength[walksForDay[0].name]; // good
-    // console.log("adjuster:", adjuster);      // adjuster: 5
 
     let hours = Number(startHourAndMinRaw[0]);
     let mins = Number(startHourAndMinRaw[1]);
 
     let totalMinutes = ((hours * 60) + mins) - adjuster;
-    // console.log("1 totalMinutes:", totalMinutes)
-    // console.log(1, minutesToTime(totalMinutes))
     return minutesToTime(totalMinutes);
 
   }
   console.log("adjusted start time:", findAdjustedStartTime());
 
-  const findEndTime = () => {
-    // find last event
-  }
 
   const adjustEndTime = () => {
 
