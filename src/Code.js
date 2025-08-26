@@ -12,7 +12,9 @@
  * 
  */
 function calendarAutomation() {
-
+  const personalCalID = "ad287b8a5121bf79b35b5f4a5da6b8efaeca21d4212c57ae628e5abc0d579438@group.calendar.google.com";
+  const employmentID = "2148af807c75a62df01b5bac3d4b64f584fd89d402b34b661b74089c363b47da@group.calendar.google.com";
+  const dawgWalkingID = "7c1ds1imbi41pvta3nggef7ov3r23e2g@import.calendar.google.com";
   let walksForDay = [];
   const driveLength = {
         'Brittany Beston' : 15,
@@ -24,8 +26,7 @@ function calendarAutomation() {
   // DONE
   // return today's (can change date) dog walking events in chronological order 
   const findDogWalkingEvents = () => {
-    const personalCalID = "ad287b8a5121bf79b35b5f4a5da6b8efaeca21d4212c57ae628e5abc0d579438@group.calendar.google.com";
-    const dawgWalkingID = "7c1ds1imbi41pvta3nggef7ov3r23e2g@import.calendar.google.com";
+    
     let blockEvents = [];
 
     const calendarId = dawgWalkingID;
@@ -49,8 +50,8 @@ function calendarAutomation() {
         return;
       }
       // Print the calendar events
-      // let today = String(Number(optionalArgs.timeMin.split("-")[2].slice(0, 2)) - 1); // 2 days in future
-      let today = "25"
+      let today = String(Number(optionalArgs.timeMin.split("-")[2].slice(0, 2))); // 2 days in future
+      // let today = "26"
       // console.log("today:", today)
       let todayEvents = [];
 
@@ -64,7 +65,7 @@ function calendarAutomation() {
           eventStartTime = event.start.date;
         }
 
-        // console.log(4, today, day)
+        // console.log(4, today, day);
 
         // events today only
         if (day !== today) { // looking for today
@@ -87,7 +88,7 @@ function calendarAutomation() {
     walksForDay = blockEvents;
     return walksForDay;
   }
-  console.log("findDogWalkingEvents:", findDogWalkingEvents());
+  findDogWalkingEvents();
 
   // DONE
   const findStartTime = () => {
@@ -105,7 +106,7 @@ function calendarAutomation() {
     // console.log("1 endHourAndMin:", endHourAndMin);
     return endHourAndMin;
   }
-  console.log("findEndTime:", findEndTime());
+  // console.log("findEndTime:", findEndTime());
 
   // DONE
   const minutesToTime = (totalMinutes) => {
@@ -126,7 +127,7 @@ function calendarAutomation() {
   //DONE
   const findAdjustedStartTime = () => {
     let startHourAndMinRaw = findStartTime().split(":");
-    console.log("0, startHourAndMinRaw:", startHourAndMinRaw)   // 18:00 
+    // console.log("0, startHourAndMinRaw:", startHourAndMinRaw)   // 18:00 
 
     let adjuster = driveLength[walksForDay[0].name]; // good
 
@@ -136,12 +137,12 @@ function calendarAutomation() {
     let totalMinutes = ((hours * 60) + mins) - adjuster;
     return minutesToTime(totalMinutes);
   }
-  console.log("adjusted start time:", findAdjustedStartTime());
+  // console.log("adjusted start time:", findAdjustedStartTime());
 
-
+  //DONE
   const adjustEndTime = () => {
     let endHourAndMinRaw = findEndTime().split(":");
-    console.log("0, endHourAndMinRaw:", endHourAndMinRaw)   // 18:00 
+    // console.log("0, endHourAndMinRaw:", endHourAndMinRaw)   // 18:00 
 
     let adjuster = driveLength[walksForDay[0].name]; // good
 
@@ -149,43 +150,48 @@ function calendarAutomation() {
     let mins = Number(endHourAndMinRaw[1]);
 
     let totalMinutes = ((hours * 60) + mins) + adjuster;
+
     return minutesToTime(totalMinutes);
   }
-  console.log("1 adjustEndTime():", adjustEndTime())
+  // console.log("1 adjustEndTime():", adjustEndTime())
 
-  const createWorkBlocks = () => {
-    // need adjusted start time
-    // need adjusted end time
+  const createWorkBlockEvent = () => {
+    // console.log("walksForDay", walksForDay);
+    let timeStrMinusStr = walksForDay[0].eventStartTime.split("T")[0] + "T";
+    // console.log("timeStrMinusStr:", timeStrMinusStr);
+
+    let eventName = "Work Block";
+    let startTime = walksForDay[0].eventStartTime.split("T")[1];  
+    let endTime = walksForDay[0].eventStartTime.split("T")[1];
+    let toReplaceSection = walksForDay[0].eventStartTime.split("T")[1].slice(0, 5); // is 19:00, replace with adjusted
+    // walksForDay[0].eventStartTime  => startTime: 2025-08-26T19:00:00Z
+    // console.log("startTime:", startTime);
+    // console.log("endTime:", endTime);
+
+    // console.log("post");
+    
+    startTime = timeStrMinusStr + startTime.replace(toReplaceSection, findAdjustedStartTime);
+    endTime = timeStrMinusStr + endTime.replace(toReplaceSection, adjustEndTime);
+
+    // console.log("toReplaceSection:", toReplaceSection);
+
+    // console.log("2, startTime:", startTime);
+    // console.log("endTime:", endTime);
+
+
+    // var startString = "August 26, 2025 10:00:00";
+    startTime = new Date(startTime);
+    endTime = new Date(endTime);
+    console.log("3, startTime:", startTime);
+
+    // select personal cal
+    let cal = CalendarApp.getOwnedCalendarById(employmentID);
+
+    cal.createEvent(eventName, startTime, endTime);
+    return "Work Block added:", startTime, endTime;
   }
-
-  
+  createWorkBlockEvent();
 }
-
-
-
-// find block start by finding first event, and going back 15 minutes
-// then block end by finding last event and adding
-// as long as events are linked with a rest no more than 1 hour
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
