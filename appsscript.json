@@ -17,5 +17,25 @@
     ]
   },
   "exceptionLogging": "STACKDRIVER",
-  "runtimeVersion": "V8"
+  "runtimeVersion": "V8",
+  "webapp": {
+    "executeAs": "USER_DEPLOYING",
+    "access": "MYSELF"
+  },
+  "addOns": {
+    "common": {
+      "name": "My Calendar Add-on",
+      "logoUrl": "https://www.i2clipart.com/cliparts/9/1/9/6/clipart-calendar-icon-large-128x128-9196.png",
+      "layoutProperties": {
+        "primaryColor": "#4285F4",
+        "secondaryColor": "#FFFFFF"
+      },
+      "useLocaleFromApp": true
+    },
+    "calendar": {
+      "homepageTrigger": {
+        "runFunction": "onEventOpen"
+      }
+    }
+  }
 }
